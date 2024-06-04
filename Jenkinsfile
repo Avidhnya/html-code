@@ -36,7 +36,7 @@ pipeline {
                 script {
                     // Deploy to Nginx server using SSH
                     sh '''
-                    ssh -o StrictHostKeyChecking=no -i ${my-ssh} ${ec-user}@${16.171.133.176'} << 'ENDSSH'
+                    ssh -o StrictHostKeyChecking=no -i ${my-ssh} ${ec-user}@${16.171.133.176} << 'ENDSSH'
                         cd ${/usr/share/nginx/html}
                         git pull origin ${main}
                         ./deploy.sh
