@@ -1,16 +1,51 @@
 pipeline {
-	agent any
+    agent any
 
-	stages {
-		stage('Build') {
-			steps {
-				echo 'Building'
-			}
-		}
-		stage('Test') {
-			steps {
-				echo 'Testing'
-			}
-		}
-	}
-}	
+    environment {
+        SSH_KEY = credentials('my-ssh') // ID of the SSH key added in Jenkins credentials
+        GIT_REPO_URL = 'https://github.com/Avidhnya/html-code.git'
+        GIT_BRANCH = 'main'
+        NGINX_SERVER = '16.171.133.176'
+        DEPLOY_DIR = '/usr/share/nginx/html'
+        USER = 'ec2-user' // Change this to your actual username on the Nginx server
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git branch: "${main}", url: "${https://github.com/Avidhnya/html-code.git}"
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                // Add your build steps here
+                echo 'Building the application...'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                // Add your test steps here
+                echo 'Running tests...'
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                script {
+                    // Deploy to Nginx server using SSH
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no -i ${my-ssh} ${ec-user}@${16.171.133.176'} << 'ENDSSH'
+                        cd ${/usr/share/nginx/html}
+                        git pull origin ${main}
+                        ./deploy.sh
+                    ENDSSH
+                    '''
+                }
+            }
+        }
+    }
+}
+
+	
