@@ -59,6 +59,12 @@ post {
             echo 'Pipeline failed. Please check the logs for errors.'
         }
     }	
+
+options {
+skipDefaultCheckout(true)
+parallelsAlwaysFailFast()
+disableConcurrentBuilds()
 }
 
+}
 
