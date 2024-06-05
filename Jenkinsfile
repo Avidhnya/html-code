@@ -3,18 +3,18 @@ pipeline {
 
     environment {
         SSH_KEY = credentials('my-ssh') // ID of the SSH key added in Jenkins credentials
-        GIT_REPO_URL = 'https://github.com/Avidhnya/html-code.git'
+        GIT_REPO_URL = 'git@github.com:Avidhnya/html-code.git'
         GIT_BRANCH = 'main'
-        NGINX_SERVER = '16.171.133.176'
+        NGINX_SERVER = '16.170.251.75'
         DEPLOY_DIR = '/usr/share/nginx/html'
         USER = 'ec2-user' // Change this to your actual username on the Nginx server
-	GIT_CREDENTIALS_ID = 'git-access' // ID of the GitHub credentials added in Jenkins
+	GIT_CREDENTIALS_ID = 'jenkins-cicd' // ID of the GitHub credentials added in Jenkins
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: '''${main}''', url: '''${https://github.com/Avidhnya/html-code.git}''', credentialsId: '''${git-access}'''
+                git branch: '''${main}''', url: '''${git@github.com:Avidhnya/html-code.git}''', credentialsId: '''${jenkins-cicd}'''
             }
         }
         
@@ -37,7 +37,7 @@ pipeline {
                 script {
                     // Deploy to Nginx server using SSH
                     sh '''
-                    ssh -o StrictHostKeyChecking=no -i ${my-ssh} ${ec-user}@${16.171.133.176} << 'ENDSSH'
+                    ssh -o StrictHostKeyChecking=no -i ${my-ssh} ${ec-user}@${16.170.251.75} << 'ENDSSH'
                         cd ${/usr/share/nginx/html}
                         git pull origin ${main}
                         ./deploy.sh
@@ -47,7 +47,6 @@ pipeline {
             }
         }
     }
-}
 
 post {
         always {
@@ -59,5 +58,7 @@ post {
         failure {
             echo 'Pipeline failed. Please check the logs for errors.'
         }
-    }
-}	
+    }	
+}
+
+
