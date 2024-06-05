@@ -8,13 +8,13 @@ pipeline {
         NGINX_SERVER = '16.170.251.75'
         DEPLOY_DIR = '/usr/share/nginx/html'
         USER = 'ec2-user' // Change this to your actual username on the Nginx server
-	GIT_CREDENTIALS_ID = 'git-access' // ID of the GitHub credentials added in Jenkins
+	GIT_CREDENTIALS_ID = 'git' // ID of the GitHub credentials added in Jenkins
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: '''${main}''', url: '''${https://github.com/Avidhnya/html-code.git}''', credentialsId: '''${git-access}'''
+                git branch: '''${main}''', url: '''${https://github.com/Avidhnya/html-code.git}''', credentialsId: '''${git}'''
             }
         }
         
